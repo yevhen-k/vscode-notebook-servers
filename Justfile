@@ -3,8 +3,9 @@ set dotenv-load := true
 TAG := `git describe --tags --always --dirty`
 BASE_IMAGE_NAME := "base-nb-vscode-cuda-11.8"
 CODESERVER_IMAGE_NAME := "codeserver"
+NOTEBOOK_IMAGE_NAME := "notebookserver"
 
-default: push-coder push-base
+default: push-coder push-base push-notebook
 
 echo:
     #!/usr/bin/env bash
@@ -25,3 +26,10 @@ build-coder: build-base
 push-coder: build-coder
     docker push $REGISTRY/{{CODESERVER_IMAGE_NAME}}:{{TAG}}
     docker push $REGISTRY/{{CODESERVER_IMAGE_NAME}}:latest
+
+build-notebook: build-base
+    docker build -t $REGISTRY/{{NOTEBOOK_IMAGE_NAME}}:{{TAG}} -t $REGISTRY/{{NOTEBOOK_IMAGE_NAME}}:latest --build-arg BASE_IMG=$REGISTRY/{{BASE_IMAGE_NAME}}:{{TAG}} -f notebookserver/Dockerfile .
+
+push-notebook: build-notebook
+    docker push $REGISTRY/{{NOTEBOOK_IMAGE_NAME}}:{{TAG}}
+    docker push $REGISTRY/{{NOTEBOOK_IMAGE_NAME}}:latest
