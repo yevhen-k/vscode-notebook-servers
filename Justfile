@@ -4,6 +4,7 @@ TAG := `git describe --tags --always --dirty`
 BASE_IMAGE_NAME := "base-nb-vscode-cuda-11.8"
 CODESERVER_IMAGE_NAME := "codeserver"
 NOTEBOOK_IMAGE_NAME := "notebookserver"
+CODESERVER_SSH_IMAGE_NAME := "codeserver-ssh"
 
 default: push-coder push-base push-notebook
 
@@ -33,3 +34,10 @@ build-notebook: build-base
 push-notebook: build-notebook
     docker push $REGISTRY/{{NOTEBOOK_IMAGE_NAME}}:{{TAG}}
     docker push $REGISTRY/{{NOTEBOOK_IMAGE_NAME}}:latest
+
+build-coder-ssh: build-base
+    docker build -t $REGISTRY/{{CODESERVER_SSH_IMAGE_NAME}}:{{TAG}} -t $REGISTRY/{{CODESERVER_SSH_IMAGE_NAME}}:latest --build-arg BASE_IMG=$REGISTRY/{{BASE_IMAGE_NAME}}:{{TAG}} -f codeserver/Dockerfile .
+
+push-coder-ssh: build-coder-ssh
+    docker push $REGISTRY/{{CODESERVER_SSH_IMAGE_NAME}}:{{TAG}}
+    docker push $REGISTRY/{{CODESERVER_SSH_IMAGE_NAME}}:latest

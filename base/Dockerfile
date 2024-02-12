@@ -37,6 +37,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
    nano \
    ncdu \
    nvtop \
+   openssh-server \
    python3-venv \
    python3-pip \
    software-properties-common \
