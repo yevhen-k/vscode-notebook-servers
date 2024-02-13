@@ -21,8 +21,8 @@ RUN curl -sL "https://github.com/cdr/code-server/releases/download/${CODESERVER_
 
 USER $NB_UID
 
-# EXPOSE 22
-EXPOSE 8888 22
+EXPOSE 22
+EXPOSE 8888
 
 # ["/usr/sbin/sshd", "-D"]
 # sudo /etc/init.d/ssh start
